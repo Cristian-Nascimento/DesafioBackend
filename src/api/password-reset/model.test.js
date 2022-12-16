@@ -20,4 +20,9 @@ describe('view', () => {
     expect(view.token).toBe(passwordReset.token)
     expect(view.user).toEqual(passwordReset.user.view(true))
   })
+  it.skip('returns full view', () => {
+    const view = passwordReset.view(true)
+    expect(view.token).toBe(passwordReset.token)
+    expect(view.user).toEqual(passwordReset.user.view(true))
+  })
 })
