@@ -9,6 +9,9 @@ const activitySchema = new Schema({
   },
   date: {
     type: String
+  },
+  duoDate: {
+    type: String
   }
 }, {
   timestamps: true,
@@ -26,6 +29,7 @@ activitySchema.methods = {
       name: this.name,
       description: this.description,
       date: this.date,
+      duoDate: this.duoDate,
       createdAt: this.createdAt,
       updatedAt: this.updatedAt
     }

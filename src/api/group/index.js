@@ -1,27 +1,31 @@
 import { Router } from 'express'
 import { middleware as query } from 'querymen'
 import { middleware as body } from 'bodymen'
-import { master } from '../../services/passport'
+import { token, master } from '../../services/passport'
 import { create, index, show, update, destroy } from './controller'
 import { schema } from './model'
 export Group, { schema } from './model'
 
 const router = new Router()
-const { name, description, duoDate } = schema.tree
+const { name, descripition, date } = schema.tree
 
 /**
  * @api {post} /groups Create group
  * @apiName CreateGroup
  * @apiGroup Group
+ * @apiPermission user
+ * @apiParam {String} access_token user access token.
  * @apiParam name Group's name.
- * @apiParam description Group's description.
- * @apiParam duoDate Group's duoDate.
+ * @apiParam descripition Group's descripition.
+ * @apiParam date Group's date.
  * @apiSuccess {Object} group Group's data.
  * @apiError {Object} 400 Some parameters may contain invalid values.
  * @apiError 404 Group not found.
+ * @apiError 401 user access only.
  */
 router.post('/',
-  body({ name, description, duoDate }),
+  token({ required: true }),
+  body({ name, descripition, date }),
   create)
 
 /**
@@ -55,8 +59,8 @@ router.get('/:id',
  * @apiPermission master
  * @apiParam {String} access_token master access token.
  * @apiParam name Group's name.
- * @apiParam description Group's description.
- * @apiParam duoDate Group's duoDate.
+ * @apiParam descripition Group's descripition.
+ * @apiParam date Group's date.
  * @apiSuccess {Object} group Group's data.
  * @apiError {Object} 400 Some parameters may contain invalid values.
  * @apiError 404 Group not found.
@@ -64,7 +68,7 @@ router.get('/:id',
  */
 router.put('/:id',
   master(),
-  body({ name, description, duoDate }),
+  body({ name, descripition, date }),
   update)
 
 /**

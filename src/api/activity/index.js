@@ -1,27 +1,32 @@
 import { Router } from 'express'
 import { middleware as query } from 'querymen'
 import { middleware as body } from 'bodymen'
-import { master } from '../../services/passport'
+import { token, master } from '../../services/passport'
 import { create, index, show, update, destroy } from './controller'
 import { schema } from './model'
 export Activity, { schema } from './model'
 
 const router = new Router()
-const { name, description, date } = schema.tree
+const { name, description, date, duoDate } = schema.tree
 
 /**
  * @api {post} /activities Create activity
  * @apiName CreateActivity
  * @apiGroup Activity
+ * @apiPermission admin
+ * @apiParam {String} access_token admin access token.
  * @apiParam name Activity's name.
  * @apiParam description Activity's description.
  * @apiParam date Activity's date.
+ * @apiParam duoDate Activity's duoDate.
  * @apiSuccess {Object} activity Activity's data.
  * @apiError {Object} 400 Some parameters may contain invalid values.
  * @apiError 404 Activity not found.
+ * @apiError 401 admin access only.
  */
 router.post('/',
-  body({ name, description, date }),
+  token({ required: true, roles: ['admin'] }),
+  body({ name, description, date, duoDate }),
   create)
 
 /**
@@ -57,6 +62,7 @@ router.get('/:id',
  * @apiParam name Activity's name.
  * @apiParam description Activity's description.
  * @apiParam date Activity's date.
+ * @apiParam duoDate Activity's duoDate.
  * @apiSuccess {Object} activity Activity's data.
  * @apiError {Object} 400 Some parameters may contain invalid values.
  * @apiError 404 Activity not found.
@@ -64,7 +70,7 @@ router.get('/:id',
  */
 router.put('/:id',
   master(),
-  body({ name, description, date }),
+  body({ name, description, date, duoDate }),
   update)
 
 /**

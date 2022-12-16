@@ -35,5 +35,5 @@ router.use('/auth', auth)
 router.use('/password-resets', passwordReset)
 router.use('/activities', activity)
 router.use('/groups', group)
-
+router.use('/name,description', group)
 export default router
