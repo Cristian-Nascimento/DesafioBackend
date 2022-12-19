@@ -2,12 +2,12 @@ import { Router } from 'express'
 import { middleware as query } from 'querymen'
 import { middleware as body } from 'bodymen'
 import { token, master } from '../../services/passport'
-import { create, index, show, update, destroy } from './controller'
+import { create, index, show, update, destroy, nameGroup } from './controller'
 import { schema } from './model'
 export Activity, { schema } from './model'
 
 const router = new Router()
-const { name, description, date, duoDate } = schema.tree
+const { name, idGroup, description, date, duoDate } = schema.tree
 
 /**
  * @api {post} /activities Create activity
@@ -85,6 +85,11 @@ router.put('/:id',
  */
 router.delete('/:id',
   master(),
+  destroy)
+
+router.move('/:id',
+  body({ idGroup }),
+  nameGroup,
   destroy)
 
 export default router

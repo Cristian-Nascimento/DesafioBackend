@@ -1,11 +1,7 @@
 import mongoose, { Schema } from 'mongoose'
+import nameGroup from '../activity/controller'
 
 const groupSchema = new Schema({
-  user: {
-    type: Schema.ObjectId,
-    ref: 'User',
-    required: true
-  },
   name: {
     type: String
   },
@@ -28,7 +24,6 @@ groupSchema.methods = {
     const view = {
       // simple view
       id: this.id,
-      user: this.user.view(full),
       name: this.name,
       descripition: this.descripition,
       date: this.date,

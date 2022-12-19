@@ -39,3 +39,8 @@ export const destroy = ({ params }, res, next) =>
     .then((activity) => activity ? activity.remove() : null)
     .then(success(res, 204))
     .catch(next)
+
+export const nameGroup = ({ params }, res, next) =>
+  Activity.findById(params.id)
+    .then(notFound(res))
+    .then((activity) => activity ?)

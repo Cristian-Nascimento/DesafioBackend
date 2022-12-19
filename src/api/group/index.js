@@ -1,7 +1,7 @@
 import { Router } from 'express'
 import { middleware as query } from 'querymen'
 import { middleware as body } from 'bodymen'
-import { token, master } from '../../services/passport'
+import { master } from '../../services/passport'
 import { create, index, show, update, destroy } from './controller'
 import { schema } from './model'
 export Group, { schema } from './model'
@@ -14,7 +14,6 @@ const { name, descripition, date } = schema.tree
  * @apiName CreateGroup
  * @apiGroup Group
  * @apiPermission user
- * @apiParam {String} access_token user access token.
  * @apiParam name Group's name.
  * @apiParam descripition Group's descripition.
  * @apiParam date Group's date.
@@ -24,7 +23,6 @@ const { name, descripition, date } = schema.tree
  * @apiError 401 user access only.
  */
 router.post('/',
-  token({ required: true }),
   body({ name, descripition, date }),
   create)
 
@@ -82,7 +80,7 @@ router.put('/:id',
  * @apiError 401 master access only.
  */
 router.delete('/:id',
-  master(),
+  //master(),
   destroy)
 
 export default router

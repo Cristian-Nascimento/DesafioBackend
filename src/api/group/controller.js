@@ -42,3 +42,7 @@ export const destroy = ({ params }, res, next) =>
     .then((group) => group ? group.remove() : null)
     .then(success(res, 204))
     .catch(next)
+
+export const receiveActivityById = ({ params }, res, next) =>
+  Group.findById(params.id)
+    .then(notFound(res))
