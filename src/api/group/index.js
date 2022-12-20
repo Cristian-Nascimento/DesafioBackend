@@ -1,29 +1,31 @@
 import { Router } from 'express'
 import { middleware as query } from 'querymen'
 import { middleware as body } from 'bodymen'
-import { master } from '../../services/passport'
+import { token, master } from '../../services/passport'
 import { create, index, show, update, destroy } from './controller'
 import { schema } from './model'
 export Group, { schema } from './model'
 
 const router = new Router()
-const { name, descripition, date } = schema.tree
+const { name, descriprion, idActivity } = schema.tree
 
 /**
  * @api {post} /groups Create group
  * @apiName CreateGroup
  * @apiGroup Group
- * @apiPermission user
+ * @apiPermission admin
+ * @apiParam {String} access_token admin access token.
  * @apiParam name Group's name.
- * @apiParam descripition Group's descripition.
- * @apiParam date Group's date.
+ * @apiParam descriprion Group's descriprion.
+ * @apiParam idActivity Group's idActivity.
  * @apiSuccess {Object} group Group's data.
  * @apiError {Object} 400 Some parameters may contain invalid values.
  * @apiError 404 Group not found.
- * @apiError 401 user access only.
+ * @apiError 401 admin access only.
  */
 router.post('/',
-  body({ name, descripition, date }),
+  token({ required: true, roles: ['admin'] }),
+  body({ name, descriprion, idActivity }),
   create)
 
 /**
@@ -57,8 +59,8 @@ router.get('/:id',
  * @apiPermission master
  * @apiParam {String} access_token master access token.
  * @apiParam name Group's name.
- * @apiParam descripition Group's descripition.
- * @apiParam date Group's date.
+ * @apiParam descriprion Group's descriprion.
+ * @apiParam idActivity Group's idActivity.
  * @apiSuccess {Object} group Group's data.
  * @apiError {Object} 400 Some parameters may contain invalid values.
  * @apiError 404 Group not found.
@@ -66,7 +68,7 @@ router.get('/:id',
  */
 router.put('/:id',
   master(),
-  body({ name, descripition, date }),
+  body({ name, descriprion, idActivity }),
   update)
 
 /**
@@ -80,7 +82,7 @@ router.put('/:id',
  * @apiError 401 master access only.
  */
 router.delete('/:id',
-  //master(),
+  master(),
   destroy)
 
 export default router

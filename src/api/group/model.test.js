@@ -1,11 +1,9 @@
 import { Group } from '.'
-import { User } from '../user'
 
-let user, group
+let group
 
 beforeEach(async () => {
-  user = await User.create({ email: 'a@a.com', password: '123456' })
-  group = await Group.create({ user, name: 'test', descripition: 'test', date: 'test' })
+  group = await Group.create({ name: 'test', descriprion: 'test', idActivity: 'test' })
 })
 
 describe('view', () => {
@@ -13,11 +11,9 @@ describe('view', () => {
     const view = group.view()
     expect(typeof view).toBe('object')
     expect(view.id).toBe(group.id)
-    expect(typeof view.user).toBe('object')
-    expect(view.user.id).toBe(user.id)
     expect(view.name).toBe(group.name)
-    expect(view.descripition).toBe(group.descripition)
-    expect(view.date).toBe(group.date)
+    expect(view.descriprion).toBe(group.descriprion)
+    expect(view.idActivity).toBe(group.idActivity)
     expect(view.createdAt).toBeTruthy()
     expect(view.updatedAt).toBeTruthy()
   })
@@ -26,11 +22,9 @@ describe('view', () => {
     const view = group.view(true)
     expect(typeof view).toBe('object')
     expect(view.id).toBe(group.id)
-    expect(typeof view.user).toBe('object')
-    expect(view.user.id).toBe(user.id)
     expect(view.name).toBe(group.name)
-    expect(view.descripition).toBe(group.descripition)
-    expect(view.date).toBe(group.date)
+    expect(view.descriprion).toBe(group.descriprion)
+    expect(view.idActivity).toBe(group.idActivity)
     expect(view.createdAt).toBeTruthy()
     expect(view.updatedAt).toBeTruthy()
   })

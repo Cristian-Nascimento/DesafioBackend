@@ -27,6 +27,7 @@ describe('view', () => {
     expect(view.description).toBe(activity.description)
     expect(view.date).toBe(activity.date)
     expect(view.duoDate).toBe(activity.duoDate)
+    expect(view.moveActivity).toBe(activity.moveActivity)
     expect(view.createdAt).toBeTruthy()
     expect(view.updatedAt).toBeTruthy()
   })

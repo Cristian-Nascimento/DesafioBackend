@@ -2,7 +2,7 @@ import { Router } from 'express'
 import { middleware as query } from 'querymen'
 import { middleware as body } from 'bodymen'
 import { token, master } from '../../services/passport'
-import { create, index, show, update, destroy, nameGroup } from './controller'
+import { create, index, show, update, destroy, moveActivity } from './controller'
 import { schema } from './model'
 export Activity, { schema } from './model'
 
@@ -89,7 +89,7 @@ router.delete('/:id',
 
 router.move('/:id',
   body({ idGroup }),
-  nameGroup,
+  moveActivity,
   destroy)
 
 export default router

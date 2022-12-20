@@ -2,17 +2,27 @@ import mongoose, { Schema } from 'mongoose'
 
 const activitySchema = new Schema({
   name: {
-    type: String
+    type: String,
+    unique: true,
+    trim: true
   },
   description: {
-    type: String
+    type: String,
+    trim: true
   },
   date: {
-    type: String
+    type: String,
+    trim: true
   },
   duoDate: {
-    type: String
+    type: String,
+    trim: true
   }
+/*   moveActivity: {
+    type: Group,
+    trim: true,
+    idGroup: String
+  } */
 }, {
   timestamps: true,
   toJSON: {
@@ -30,8 +40,12 @@ activitySchema.methods = {
       description: this.description,
       date: this.date,
       duoDate: this.duoDate,
+      moveActivity: this.moveActivity,
       createdAt: this.createdAt,
       updatedAt: this.updatedAt
+    }
+    if (this.duoDate > new Date()) {
+      console.info('O prazo para a entrega da atividade foi vencida')
     }
 
     return full ? {
