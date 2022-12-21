@@ -2,12 +2,12 @@ import { Router } from 'express'
 import { middleware as query } from 'querymen'
 import { middleware as body } from 'bodymen'
 import { token, master } from '../../services/passport'
-import { create, index, show, update, destroy, moveActivity } from './controller'
+import { create, index, show, update, destroy } from './controller'
 import { schema } from './model'
 export Activity, { schema } from './model'
 
 const router = new Router()
-const { name, idGroup, description, date, duoDate } = schema.tree
+const { name, description, duoDate } = schema.tree
 
 /**
  * @api {post} /activities Create activity
@@ -17,7 +17,6 @@ const { name, idGroup, description, date, duoDate } = schema.tree
  * @apiParam {String} access_token admin access token.
  * @apiParam name Activity's name.
  * @apiParam description Activity's description.
- * @apiParam date Activity's date.
  * @apiParam duoDate Activity's duoDate.
  * @apiSuccess {Object} activity Activity's data.
  * @apiError {Object} 400 Some parameters may contain invalid values.
@@ -26,7 +25,7 @@ const { name, idGroup, description, date, duoDate } = schema.tree
  */
 router.post('/',
   token({ required: true, roles: ['admin'] }),
-  body({ name, description, date, duoDate }),
+  body({ name, description, duoDate }),
   create)
 
 /**
@@ -61,7 +60,6 @@ router.get('/:id',
  * @apiParam {String} access_token master access token.
  * @apiParam name Activity's name.
  * @apiParam description Activity's description.
- * @apiParam date Activity's date.
  * @apiParam duoDate Activity's duoDate.
  * @apiSuccess {Object} activity Activity's data.
  * @apiError {Object} 400 Some parameters may contain invalid values.
@@ -70,7 +68,7 @@ router.get('/:id',
  */
 router.put('/:id',
   master(),
-  body({ name, description, date, duoDate }),
+  body({ name, description, duoDate }),
   update)
 
 /**
@@ -85,11 +83,6 @@ router.put('/:id',
  */
 router.delete('/:id',
   master(),
-  destroy)
-
-router.move('/:id',
-  body({ idGroup }),
-  moveActivity,
   destroy)
 
 export default router
