@@ -40,8 +40,9 @@ export const destroy = ({ params }, res, next) =>
     .then(success(res, 204))
     .catch(next)
 
-export const moveActivity = ({ params }, res, next) =>
-  Activity.findById(params.id)
+export const transfer = ({ params }, res, next) =>
+  Activity.findByIdAndUpdate(params.id, { nameGroup: 'nameGroup'})
     .then(notFound(res))
-    .then((activity) => activity ? activity.move() : null)
+    .then((activity) => activity ? activity.view() : null)
+    .then(success(res))
     .catch(next)

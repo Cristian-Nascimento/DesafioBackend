@@ -2,12 +2,12 @@ import { Router } from 'express'
 import { middleware as query } from 'querymen'
 import { middleware as body } from 'bodymen'
 import { token, master } from '../../services/passport'
-import { create, index, show, update, destroy } from './controller'
+import { create, index, show, update, destroy, transfer } from './controller'
 import { schema } from './model'
 export Activity, { schema } from './model'
 
 const router = new Router()
-const { name, description, duoDate } = schema.tree
+const { name, description, duoDate, nameGroup } = schema.tree
 
 /**
  * @api {post} /activities Create activity
@@ -72,6 +72,19 @@ router.put('/:id',
   update)
 
 /**
+ * @api {move} /activities/:id To move activity
+ * @apiName MoveActivity
+ * @apiGroup Activity
+ * @apiParam name Activity's name.
+ * @apiParam nameGroup Group's name.
+ * @apiSuccess (Success 204) 204 No Content.
+ * @apiError 404 Activity not found.
+ */
+router.put('/:id',
+  body({ name, nameGroup }),
+  transfer)
+
+/**
  * @api {delete} /activities/:id Delete activity
  * @apiName DeleteActivity
  * @apiGroup Activity
@@ -84,5 +97,18 @@ router.put('/:id',
 router.delete('/:id',
   master(),
   destroy)
+
+/**
+ * @api {move} /activities/:id To move activity
+ * @apiName MoveActivity
+ * @apiGroup Activity
+ * @apiParam name Activity's name.
+ * @apiParam nameGroup Group's name.
+ * @apiSuccess (Success 204) 204 No Content.
+ * @apiError 404 Activity not found.
+ */
+router.put('/:id',
+  body({ name, nameGroup }),
+  transfer)
 
 export default router

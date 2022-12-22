@@ -2,13 +2,26 @@ import mongoose, { Schema } from 'mongoose'
 
 const activitySchema = new Schema({
   name: {
-    type: String
+    type: String,
+    unique: true,
+    trim: true
   },
   description: {
-    type: String
+    type: String,
+    trim: true
+  },
+  date: {
+    type: String,
+    trim: true
   },
   duoDate: {
-    type: String
+    type: String,
+    trim: true
+  },
+  nameGroup: {
+    type: String,
+    trim: true,
+    idGroup: String
   }
 }, {
   timestamps: true,
@@ -19,20 +32,27 @@ const activitySchema = new Schema({
 })
 
 activitySchema.methods = {
-  view (full) {
+
+  view(full) {
     const view = {
-      // simple view
       id: this.id,
       name: this.name,
       description: this.description,
       duoDate: this.duoDate,
       createdAt: this.createdAt,
-      updatedAt: this.updatedAt
+      updatedAt: this.updatedAt,
+      nameGroup: this.nameGroup
     }
+
+    let data = this.duoDate
+    data = data.split('/')
+    data = new Date(data[2], data[1] - 1, data[0])
+    if (this.duoDate > new Date()) {
+      console.log('O prazo para a entrega da atividade foi vencida')
+    }else console.log('está dentro do prazo')
 
     return full ? {
       ...view
-      // add properties for a full view
     } : view
   }
 }

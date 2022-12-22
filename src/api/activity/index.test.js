@@ -20,12 +20,12 @@ beforeEach(async () => {
 test('POST /activities 201 (admin)', async () => {
   const { status, body } = await request(app())
     .post(`${apiRoot}`)
-    .send({ access_token: adminSession, name: 'test', description: 'test', duoDate: 'test' })
+    .send({ access_token: adminSession, name: 'test', description: 'test', duoDate: '20/12/2022' })
   expect(status).toBe(201)
   expect(typeof body).toEqual('object')
   expect(body.name).toEqual('test')
   expect(body.description).toEqual('test')
-  expect(body.duoDate).toEqual('test')
+  expect(body.duoDate).toEqual('20/12/2022')
 })
 
 test('POST /activities 401 (user)', async () => {
@@ -66,13 +66,13 @@ test('GET /activities/:id 404', async () => {
 test('PUT /activities/:id 200 (master)', async () => {
   const { status, body } = await request(app())
     .put(`${apiRoot}/${activity.id}`)
-    .send({ access_token: masterKey, name: 'test', description: 'test', duoDate: 'test' })
+    .send({ access_token: masterKey, name: 'test', description: 'test', duoDate: '20/12/2022' })
   expect(status).toBe(200)
   expect(typeof body).toEqual('object')
   expect(body.id).toEqual(activity.id)
   expect(body.name).toEqual('test')
   expect(body.description).toEqual('test')
-  expect(body.duoDate).toEqual('test')
+  expect(body.duoDate).toEqual('20/12/2022')
 })
 
 test('PUT /activities/:id 401 (admin)', async () => {
@@ -98,7 +98,7 @@ test('PUT /activities/:id 401', async () => {
 test('PUT /activities/:id 404 (master)', async () => {
   const { status } = await request(app())
     .put(apiRoot + '/123456789098765432123456')
-    .send({ access_token: masterKey, name: 'test', description: 'test', duoDate: 'test' })
+    .send({ access_token: masterKey, name: 'test', description: 'test', duoDate: '20/12/2022' })
   expect(status).toBe(404)
 })
 
