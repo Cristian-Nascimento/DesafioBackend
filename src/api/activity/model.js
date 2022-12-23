@@ -3,14 +3,9 @@ import mongoose, { Schema } from 'mongoose'
 const activitySchema = new Schema({
   name: {
     type: String,
-    unique: true,
     trim: true
   },
   description: {
-    type: String,
-    trim: true
-  },
-  date: {
     type: String,
     trim: true
   },
@@ -21,7 +16,9 @@ const activitySchema = new Schema({
   nameGroup: {
     type: String,
     trim: true,
-    idGroup: String
+  },
+  completedActivity: {
+    type: Boolean,
   }
 }, {
   timestamps: true,
@@ -30,6 +27,8 @@ const activitySchema = new Schema({
     transform: (obj, ret) => { delete ret._id }
   }
 })
+
+let cont = 0
 
 activitySchema.methods = {
 
@@ -41,18 +40,33 @@ activitySchema.methods = {
       duoDate: this.duoDate,
       createdAt: this.createdAt,
       updatedAt: this.updatedAt,
-      nameGroup: this.nameGroup
+      nameGroup: this.nameGroup,
+      completedActivity: this.completedActivity
     }
 
-    let data = this.duoDate
+    /**
+     * @api {activity} overdue activity
+     */
+    let data = view.duoDate
     data = data.split('/')
     data = new Date(data[2], data[1] - 1, data[0])
-    if (this.duoDate > new Date()) {
-      console.log('O prazo para a entrega da atividade foi vencida')
-    }else console.log('está dentro do prazo')
+
+    if (data < new Date() && !view.completedActivity) {
+      console.log(`Deadline for submitting the activity "${view.name}" was won`)
+      cont += 1
+      console.log(`There are ${cont} pending`)
+    } else console.log(`The activity "${view.name}" is on schedule`)
+
+    /**
+     * @api {activity} Complete Activity
+     */
+    if (view.completedActivity) {
+      console.log(`The activity "${view.name}" is finished`)
+    } else console.log(`The activity "${view.name}" is in progress`)
 
     return full ? {
       ...view
+
     } : view
   }
 }

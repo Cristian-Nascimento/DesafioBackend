@@ -2,18 +2,14 @@ import { Router } from 'express'
 import { middleware as query } from 'querymen'
 import { middleware as body } from 'bodymen'
 import { token, master } from '../../services/passport'
-import { create, index, show, update, destroy, transfer } from './controller'
+import { create, index, show, update, destroy, transfer, finder, } from './controller'
 import { schema } from './model'
 export Activity, { schema } from './model'
 
 const router = new Router()
-const { name, description, duoDate, nameGroup } = schema.tree
+const { name, description, duoDate, nameGroup, completedActivity } = schema.tree
 
 /**
- * @api {post} /activities Create activity
- * @apiName CreateActivity
- * @apiGroup Activity
- * @apiPermission admin
  * @apiParam {String} access_token admin access token.
  * @apiParam name Activity's name.
  * @apiParam description Activity's description.
@@ -25,7 +21,7 @@ const { name, description, duoDate, nameGroup } = schema.tree
  */
 router.post('/',
   token({ required: true, roles: ['admin'] }),
-  body({ name, description, duoDate }),
+  body({ name, description, duoDate, nameGroup, completedActivity }),
   create)
 
 /**
@@ -42,6 +38,21 @@ router.get('/',
   index)
 
 /**
+ * @api {get} /activities Retrieve activities
+ * @apiName RetrieveActivities
+ * @apiGroup Activity
+ * @apiUse listParams
+ * @apiSuccess {Number} count Total amount of activities.
+ * @apiSuccess {Object[]} rows List of activities.
+ * @apiError {Object} 400 Some parameters may contain invalid values.
+ * @apiError 404 Activity not found.
+ */
+
+router.get('/finder',
+  query({ name: { type: String } }),
+  finder)
+
+/**
  * @api {get} /activities/:id Retrieve activity
  * @apiName RetrieveActivity
  * @apiGroup Activity
@@ -49,6 +60,7 @@ router.get('/',
  * @apiError {Object} 400 Some parameters may contain invalid values.
  * @apiError 404 Activity not found.
  */
+
 router.get('/:id',
   show)
 
@@ -68,7 +80,7 @@ router.get('/:id',
  */
 router.put('/:id',
   master(),
-  body({ name, description, duoDate }),
+  body({ name, description, duoDate, completedActivity }),
   update)
 
 /**
@@ -80,7 +92,7 @@ router.put('/:id',
  * @apiSuccess (Success 204) 204 No Content.
  * @apiError 404 Activity not found.
  */
-router.put('/:id',
+router.put('/:id/transfer',
   body({ name, nameGroup }),
   transfer)
 
@@ -97,18 +109,5 @@ router.put('/:id',
 router.delete('/:id',
   master(),
   destroy)
-
-/**
- * @api {move} /activities/:id To move activity
- * @apiName MoveActivity
- * @apiGroup Activity
- * @apiParam name Activity's name.
- * @apiParam nameGroup Group's name.
- * @apiSuccess (Success 204) 204 No Content.
- * @apiError 404 Activity not found.
- */
-router.put('/:id',
-  body({ name, nameGroup }),
-  transfer)
 
 export default router

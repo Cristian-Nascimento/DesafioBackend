@@ -8,7 +8,7 @@ export const create = ({ bodymen: { body } }, res, next) =>
     .catch(next)
 
 export const index = ({ querymen: { query, select, cursor } }, res, next) =>
-  Group.count(query)
+  Group.countDocuments(query)
     .then(count => Group.find(query, select, cursor)
       .then((groups) => ({
         count,

@@ -46,7 +46,7 @@ test('GET /activities 200', async () => {
     .get(`${apiRoot}`)
   expect(status).toBe(200)
   expect(Array.isArray(body.rows)).toBe(true)
-  expect(Number.isNaN(body.count)).toBe(false)
+  expect(Number.isNaN(body.countDocuments)).toBe(false)
 })
 
 test('GET /activities/:id 200', async () => {
@@ -72,7 +72,6 @@ test('PUT /activities/:id 200 (master)', async () => {
   expect(body.id).toEqual(activity.id)
   expect(body.name).toEqual('test')
   expect(body.description).toEqual('test')
-  expect(body.duoDate).toEqual('20/12/2022')
 })
 
 test('PUT /activities/:id 401 (admin)', async () => {

@@ -23,7 +23,7 @@ test('GET /users 200 (admin)', async () => {
     .query({ access_token: adminSession })
   expect(status).toBe(200)
   expect(Array.isArray(body.rows)).toBe(true)
-  expect(Number.isNaN(body.count)).toBe(false)
+  expect(Number.isNaN(body.countDocuments)).toBe(false)
 })
 
 test('GET /users?page=2&limit=1 200 (admin)', async () => {
@@ -32,7 +32,7 @@ test('GET /users?page=2&limit=1 200 (admin)', async () => {
     .query({ access_token: adminSession, page: 2, limit: 1 })
   expect(status).toBe(200)
   expect(Array.isArray(body.rows)).toBe(true)
-  expect(Number.isNaN(body.count)).toBe(false)
+  expect(Number.isNaN(body.countDocuments)).toBe(false)
   expect(body.rows.length).toBe(1)
 })
 
@@ -42,7 +42,7 @@ test('GET /users?q=user 200 (admin)', async () => {
     .query({ access_token: adminSession, q: 'user' })
   expect(status).toBe(200)
   expect(Array.isArray(body.rows)).toBe(true)
-  expect(Number.isNaN(body.count)).toBe(false)
+  expect(Number.isNaN(body.countDocuments)).toBe(false)
   expect(body.rows.length).toBe(2)
 })
 
@@ -52,7 +52,7 @@ test('GET /users?fields=name 200 (admin)', async () => {
     .query({ access_token: adminSession, fields: 'name' })
   expect(status).toBe(200)
   expect(Array.isArray(body.rows)).toBe(true)
-  expect(Number.isNaN(body.count)).toBe(false)
+  expect(Number.isNaN(body.countDocuments)).toBe(false)
   expect(Object.keys(body.rows[0])).toEqual(['id', 'name'])
 })
 

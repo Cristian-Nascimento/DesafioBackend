@@ -46,7 +46,7 @@ test('GET /groups 200', async () => {
     .get(`${apiRoot}`)
   expect(status).toBe(200)
   expect(Array.isArray(body.rows)).toBe(true)
-  expect(Number.isNaN(body.count)).toBe(false)
+  expect(Number.isNaN(body.countDocuments)).toBe(false)
 })
 
 test('GET /groups/:id 200', async () => {
