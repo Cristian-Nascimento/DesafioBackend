@@ -3,7 +3,7 @@ import { Activity } from '.'
 let activity
 
 beforeEach(async () => {
-  activity = await Activity.create({ name: 'test', description: 'test', date: 'test', duoDate: 'test' })
+  activity = await Activity.create({ name: 'test', description: 'test', duoDate: '20/12/2022' })
 })
 
 describe('view', () => {
@@ -13,7 +13,6 @@ describe('view', () => {
     expect(view.id).toBe(activity.id)
     expect(view.name).toBe(activity.name)
     expect(view.description).toBe(activity.description)
-    expect(view.date).toBe(activity.date)
     expect(view.duoDate).toBe(activity.duoDate)
     expect(view.createdAt).toBeTruthy()
     expect(view.updatedAt).toBeTruthy()
@@ -25,7 +24,6 @@ describe('view', () => {
     expect(view.id).toBe(activity.id)
     expect(view.name).toBe(activity.name)
     expect(view.description).toBe(activity.description)
-    expect(view.date).toBe(activity.date)
     expect(view.duoDate).toBe(activity.duoDate)
     expect(view.createdAt).toBeTruthy()
     expect(view.updatedAt).toBeTruthy()

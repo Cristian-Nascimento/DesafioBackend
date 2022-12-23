@@ -14,19 +14,25 @@ beforeEach(async () => {
   const admin = await User.create({ email: 'c@c.com', password: '123456', role: 'admin' })
   userSession = signSync(user.id)
   adminSession = signSync(admin.id)
-  group = await Group.create({ user })
+  group = await Group.create({})
 })
 
-test('POST /groups 201 (user)', async () => {
+test('POST /groups 201 (admin)', async () => {
   const { status, body } = await request(app())
     .post(`${apiRoot}`)
-    .send({ access_token: userSession, name: 'test', descripition: 'test', date: 'test' })
+    .send({ access_token: adminSession, name: 'test', descriprion: 'test', idActivity: 'test' })
   expect(status).toBe(201)
   expect(typeof body).toEqual('object')
   expect(body.name).toEqual('test')
-  expect(body.descripition).toEqual('test')
-  expect(body.date).toEqual('test')
-  expect(typeof body.user).toEqual('object')
+  expect(body.descriprion).toEqual('test')
+  expect(body.idActivity).toEqual('test')
+})
+
+test('POST /groups 401 (user)', async () => {
+  const { status } = await request(app())
+    .post(`${apiRoot}`)
+    .send({ access_token: userSession })
+  expect(status).toBe(401)
 })
 
 test('POST /groups 401', async () => {
@@ -40,7 +46,7 @@ test('GET /groups 200', async () => {
     .get(`${apiRoot}`)
   expect(status).toBe(200)
   expect(Array.isArray(body.rows)).toBe(true)
-  expect(Number.isNaN(body.count)).toBe(false)
+  expect(Number.isNaN(body.countDocuments)).toBe(false)
 })
 
 test('GET /groups/:id 200', async () => {
@@ -60,13 +66,13 @@ test('GET /groups/:id 404', async () => {
 test('PUT /groups/:id 200 (master)', async () => {
   const { status, body } = await request(app())
     .put(`${apiRoot}/${group.id}`)
-    .send({ access_token: masterKey, name: 'test', descripition: 'test', date: 'test' })
+    .send({ access_token: masterKey, name: 'test', descriprion: 'test', idActivity: 'test' })
   expect(status).toBe(200)
   expect(typeof body).toEqual('object')
   expect(body.id).toEqual(group.id)
   expect(body.name).toEqual('test')
-  expect(body.descripition).toEqual('test')
-  expect(body.date).toEqual('test')
+  expect(body.descriprion).toEqual('test')
+  expect(body.idActivity).toEqual('test')
 })
 
 test('PUT /groups/:id 401 (admin)', async () => {
@@ -92,7 +98,7 @@ test('PUT /groups/:id 401', async () => {
 test('PUT /groups/:id 404 (master)', async () => {
   const { status } = await request(app())
     .put(apiRoot + '/123456789098765432123456')
-    .send({ access_token: masterKey, name: 'test', descripition: 'test', date: 'test' })
+    .send({ access_token: masterKey, name: 'test', descriprion: 'test', idActivity: 'test' })
   expect(status).toBe(404)
 })
 

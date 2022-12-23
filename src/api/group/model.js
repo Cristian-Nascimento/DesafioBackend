@@ -1,14 +1,13 @@
 import mongoose, { Schema } from 'mongoose'
-import nameGroup from '../activity/controller'
 
 const groupSchema = new Schema({
   name: {
     type: String
   },
-  descripition: {
+  descriprion: {
     type: String
   },
-  date: {
+  idActivity: {
     type: String
   }
 }, {
@@ -25,8 +24,8 @@ groupSchema.methods = {
       // simple view
       id: this.id,
       name: this.name,
-      descripition: this.descripition,
-      date: this.date,
+      descriprion: this.descriprion,
+      idActivity: this.idActivity,
       createdAt: this.createdAt,
       updatedAt: this.updatedAt
     }

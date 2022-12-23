@@ -2,16 +2,23 @@ import mongoose, { Schema } from 'mongoose'
 
 const activitySchema = new Schema({
   name: {
-    type: String
+    type: String,
+    trim: true
   },
   description: {
-    type: String
-  },
-  date: {
-    type: String
+    type: String,
+    trim: true
   },
   duoDate: {
-    type: String
+    type: String,
+    trim: true
+  },
+  nameGroup: {
+    type: String,
+    trim: true,
+  },
+  completedActivity: {
+    type: Boolean,
   }
 }, {
   timestamps: true,
@@ -21,22 +28,45 @@ const activitySchema = new Schema({
   }
 })
 
+let cont = 0
+
 activitySchema.methods = {
-  view (full) {
+
+  view(full) {
     const view = {
-      // simple view
       id: this.id,
       name: this.name,
       description: this.description,
-      date: this.date,
       duoDate: this.duoDate,
       createdAt: this.createdAt,
-      updatedAt: this.updatedAt
+      updatedAt: this.updatedAt,
+      nameGroup: this.nameGroup,
+      completedActivity: this.completedActivity
     }
+
+    /**
+     * @api {activity} overdue activity
+     */
+    let data = view.duoDate
+    data = data.split('/')
+    data = new Date(data[2], data[1] - 1, data[0])
+
+    if (data < new Date() && !view.completedActivity) {
+      console.log(`Deadline for submitting the activity "${view.name}" was won`)
+      cont += 1
+      console.log(`There are ${cont} pending`)
+    } else console.log(`The activity "${view.name}" is on schedule`)
+
+    /**
+     * @api {activity} Complete Activity
+     */
+    if (view.completedActivity) {
+      console.log(`The activity "${view.name}" is finished`)
+    } else console.log(`The activity "${view.name}" is in progress`)
 
     return full ? {
       ...view
-      // add properties for a full view
+
     } : view
   }
 }

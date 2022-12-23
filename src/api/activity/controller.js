@@ -8,7 +8,7 @@ export const create = ({ bodymen: { body } }, res, next) =>
     .catch(next)
 
 export const index = ({ querymen: { query, select, cursor } }, res, next) =>
-  Activity.count(query)
+  Activity.countDocuments(query)
     .then(count => Activity.find(query, select, cursor)
       .then((activities) => ({
         count,
@@ -40,7 +40,17 @@ export const destroy = ({ params }, res, next) =>
     .then(success(res, 204))
     .catch(next)
 
-export const nameGroup = ({ params }, res, next) =>
-  Activity.findById(params.id)
+export const transfer = ({ bodymen: { body }, params }, res, next) =>
+  Activity.findByIdAndUpdate(params.id, { nameGroup: 'nameGroup' })
     .then(notFound(res))
-    .then((activity) => activity ?)
+    .then((activity) => activity ? Object.assign(activity, body).save() : null)
+    .then((activity) => activity ? activity.view() : null)
+    .then(success(res))
+    .catch(next)
+
+export const finder = ({ querymen: { query } }, res, next) => {
+  Activity.find({ name: query.name })
+    .then(notFound(res))
+    .then(success(res))
+    .catch(next)
+}
