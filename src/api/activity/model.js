@@ -51,11 +51,16 @@ activitySchema.methods = {
     data = data.split('/')
     data = new Date(data[2], data[1] - 1, data[0])
 
-    if (data < new Date() && !view.completedActivity) {
-      console.log(`Deadline for submitting the activity "${view.name}" was won`)
-      cont += 1
-      console.log(`There are ${cont} pending`)
-    } else console.log(`The activity "${view.name}" is on schedule`)
+    function checkDate(data) {
+      return data instanceof Date && !isNaN(data);
+    }
+    if (checkDate(data)) {
+      if (data < new Date() && !view.completedActivity) {
+        console.log(`Deadline for submitting the activity "${view.name}" was won`)
+        cont += 1
+        console.log(`There are ${cont} pending`)
+      } else console.log(`The activity "${view.name}" is on schedule`)
+    } else console.log('please enter a valid date')
 
     /**
      * @api {activity} Complete Activity

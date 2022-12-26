@@ -49,7 +49,7 @@ export const transfer = ({ bodymen: { body }, params }, res, next) =>
     .catch(next)
 
 export const finder = ({ querymen: { query } }, res, next) => {
-  Activity.find({ name: query.name })
+  Activity.find({ name: { $regex:query.name } } )
     .then(notFound(res))
     .then(success(res))
     .catch(next)
