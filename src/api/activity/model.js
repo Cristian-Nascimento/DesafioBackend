@@ -3,22 +3,27 @@ import mongoose, { Schema } from 'mongoose'
 const activitySchema = new Schema({
   name: {
     type: String,
-    trim: true
+    trim: true,
+    required: true
   },
   description: {
     type: String,
-    trim: true
+    trim: true,
+    required: true
   },
   duoDate: {
-    type: String,
-    trim: true
+    type: Date,
+    required: true
   },
-  nameGroup: {
-    type: String,
-    trim: true,
-  },
+  nameGroup: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Group',
+    required: true
+  }],
   completedActivity: {
     type: Boolean,
+    required: true,
+    default: false
   }
 }, {
   timestamps: true,
@@ -31,7 +36,6 @@ const activitySchema = new Schema({
 let cont = 0
 
 activitySchema.methods = {
-
   view(full) {
     const view = {
       id: this.id,
@@ -47,24 +51,22 @@ activitySchema.methods = {
     /**
      * @api {activity} overdue activity
      */
-    let data = view.duoDate
-    data = data.split('/')
-    data = new Date(data[2], data[1] - 1, data[0])
 
-    function checkDate(data) {
-      return data instanceof Date && !isNaN(data);
+    if (this.duoDate < new Date() && !view.completedActivity) {
+      console.log(`Deadline for submitting the activity "${view.name}" was won`)
+      cont += 1
+      console.log(`There are ${cont} pending`)
+    } else {
+      if (!cont == 0) {
+        cont -= 1
+      }
+      console.log(`The activity "${view.name}" is on schedule`)
     }
-    if (checkDate(data)) {
-      if (data < new Date() && !view.completedActivity) {
-        console.log(`Deadline for submitting the activity "${view.name}" was won`)
-        cont += 1
-        console.log(`There are ${cont} pending`)
-      } else console.log(`The activity "${view.name}" is on schedule`)
-    } else console.log('please enter a valid date')
 
     /**
      * @api {activity} Complete Activity
      */
+
     if (view.completedActivity) {
       console.log(`The activity "${view.name}" is finished`)
     } else console.log(`The activity "${view.name}" is in progress`)

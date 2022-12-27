@@ -2,14 +2,13 @@ import mongoose, { Schema } from 'mongoose'
 
 const groupSchema = new Schema({
   name: {
-    type: String
+    type: String,
+    required: true
   },
-  descriprion: {
-    type: String
-  },
-  idActivity: {
-    type: String
-  }
+  idActivity: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Activity'
+  }],
 }, {
   timestamps: true,
   toJSON: {
@@ -19,20 +18,18 @@ const groupSchema = new Schema({
 })
 
 groupSchema.methods = {
-  view (full) {
+  view(full) {
     const view = {
       // simple view
       id: this.id,
       name: this.name,
-      descriprion: this.descriprion,
       idActivity: this.idActivity,
       createdAt: this.createdAt,
-      updatedAt: this.updatedAt
+      updatedAt: this.updatedAt,
     }
 
     return full ? {
       ...view
-      // add properties for a full view
     } : view
   }
 }

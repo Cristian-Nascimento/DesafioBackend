@@ -1,7 +1,7 @@
 import { Router } from 'express'
 import { middleware as query } from 'querymen'
 import { middleware as body } from 'bodymen'
-import { token, master } from '../../services/passport'
+import { master } from '../../services/passport'
 import { create, index, show, update, destroy, transfer, finder, } from './controller'
 import { schema } from './model'
 export Activity, { schema } from './model'
@@ -10,7 +10,6 @@ const router = new Router()
 const { name, description, duoDate, nameGroup, completedActivity } = schema.tree
 
 /**
- * @apiParam {String} access_token admin access token.
  * @apiParam name Activity's name.
  * @apiParam description Activity's description.
  * @apiParam duoDate Activity's duoDate.
@@ -20,7 +19,7 @@ const { name, description, duoDate, nameGroup, completedActivity } = schema.tree
  * @apiError 401 admin access only.
  */
 router.post('/',
-  token({ required: true, roles: ['admin'] }),
+  master(),
   body({ name, description, duoDate, nameGroup, completedActivity }),
   create)
 
@@ -69,7 +68,6 @@ router.get('/:id',
  * @apiName UpdateActivity
  * @apiGroup Activity
  * @apiPermission master
- * @apiParam {String} access_token master access token.
  * @apiParam name Activity's name.
  * @apiParam description Activity's description.
  * @apiParam duoDate Activity's duoDate.
@@ -80,7 +78,7 @@ router.get('/:id',
  */
 router.put('/:id',
   master(),
-  body({ name, description, duoDate, completedActivity }),
+  body({ name, description, duoDate, completedActivity, nameGroup }),
   update)
 
 /**
@@ -101,7 +99,6 @@ router.put('/:id/transfer',
  * @apiName DeleteActivity
  * @apiGroup Activity
  * @apiPermission master
- * @apiParam {String} access_token master access token.
  * @apiSuccess (Success 204) 204 No Content.
  * @apiError 404 Activity not found.
  * @apiError 401 master access only.

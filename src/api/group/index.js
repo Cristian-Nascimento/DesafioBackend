@@ -1,22 +1,20 @@
 import { Router } from 'express'
 import { middleware as query } from 'querymen'
 import { middleware as body } from 'bodymen'
-import { token, master } from '../../services/passport'
+import { master } from '../../services/passport'
 import { create, index, show, update, destroy } from './controller'
 import { schema } from './model'
 export Group, { schema } from './model'
 
 const router = new Router()
-const { name, descriprion, idActivity } = schema.tree
+const { name, idActivity } = schema.tree
 
 /**
  * @api {post} /groups Create group
  * @apiName CreateGroup
  * @apiGroup Group
  * @apiPermission admin
- * @apiParam {String} access_token admin access token.
  * @apiParam name Group's name.
- * @apiParam descriprion Group's descriprion.
  * @apiParam idActivity Group's idActivity.
  * @apiSuccess {Object} group Group's data.
  * @apiError {Object} 400 Some parameters may contain invalid values.
@@ -24,8 +22,8 @@ const { name, descriprion, idActivity } = schema.tree
  * @apiError 401 admin access only.
  */
 router.post('/',
-  token({ required: true, roles: ['admin'] }),
-  body({ name, descriprion, idActivity }),
+  master(),
+  body({ name, idActivity }),
   create)
 
 /**
@@ -57,9 +55,7 @@ router.get('/:id',
  * @apiName UpdateGroup
  * @apiGroup Group
  * @apiPermission master
- * @apiParam {String} access_token master access token.
  * @apiParam name Group's name.
- * @apiParam descriprion Group's descriprion.
  * @apiParam idActivity Group's idActivity.
  * @apiSuccess {Object} group Group's data.
  * @apiError {Object} 400 Some parameters may contain invalid values.
@@ -68,7 +64,7 @@ router.get('/:id',
  */
 router.put('/:id',
   master(),
-  body({ name, descriprion, idActivity }),
+  body({ name, idActivity }),
   update)
 
 /**
@@ -76,7 +72,6 @@ router.put('/:id',
  * @apiName DeleteGroup
  * @apiGroup Group
  * @apiPermission master
- * @apiParam {String} access_token master access token.
  * @apiSuccess (Success 204) 204 No Content.
  * @apiError 404 Group not found.
  * @apiError 401 master access only.
